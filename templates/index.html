@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <title>{{ $title }}</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+
+    <header>
+        <nav class="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+            <div class="px-9 flex flex-wrap justify-between items-center mx-auto">
+                <a href="/" class="flex items-center">
+                    <span class="self-center text-xl font-semibold whitespace-nowrap text-teal-600 bg-slate-200 py-2 px-8 rounded-full">WebCrawler</span>
+                </a>
+                <div class="hidden justify-left w-full lg:flex lg:w-auto lg:order-1 text-gray-600" id="mobile-menu-2">
+                    Web crawler testing tool
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <div class="relative max-w-8xl py-6 mx-auto px-4 sm:px-6 lg:px-8 sm:items-center sm:justify-between gap-6">
+
+        <div class="rounded-t-lg overflow-hidden border-t border-l border-r border-gray-400 flex justify-center p-8">
+            <form class="w-full" action="/" method="get">
+                <div class="flex items-center border-b border-teal-500 py-2">
+                    <label class="w-full">
+                        <input class="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+                               type="text" placeholder="https://"  name="url" value="{{ $current_url }}">
+                    </label>
+                    <button title="Cancel" class="flex-shrink-0 border-transparent border-4 text-teal-500 hover:text-teal-800 text-sm py-1 px-2 rounded" type="reset">
+                        &#x2715;
+                    </button>
+                    <button title="Crawl" class="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white py-1 px-2 rounded" type="submit">
+                        &#10140;
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="rounded-b-lg border-b border-l border-r border-gray-400 table-fixed w-full text-sm">
+
+            {% if (isset($PagesScoringBoardData) && $PagesScoringBoardData): %}
+
+                {% if (isset($pagesStatistics) && $pagesStatistics): %}
+                        <p class="w-full text-center pt-0 pb-8 pl-8 pr-8 text-base">
+                        Page count: <strong>{{ $pagesStatistics['page_count'] }}</strong>,
+                        Unique images: <strong>{{ $pagesStatistics['unique_images_count'] }}</strong>,
+                        Unique internal links: <strong>{{ $pagesStatistics['unique_internal_links_count'] }}</strong>,
+                        Unique external links: <strong>{{ $pagesStatistics['unique_external_links_count'] }}</strong>,
+                        Average load time: <strong>{{ number_format($pagesStatistics['avg_pages_load'], 3, '.', ' ') }} sec.</strong>,
+                        Average title length: <strong>{{ $pagesStatistics['avg_title_length'] }}</strong>,
+                        Average word count: <strong>{{ $pagesStatistics['avg_words_count'] }}</strong>,
+                        Check time: <strong>{{ date('Y-m-d H:i:s', $pagesStatistics['created_at']) }}</strong>
+                    </p>
+                {% endif; %}
+
+                <table class="border-collapse table-auto w-full text-sm">
+                    <thead>
+                    <tr>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">#</th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Title</th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Words</th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Images</th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Internal Links</th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">External Links</th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Status code</th>
+                        <th class="border-b dark:border-slate-600 font-medium p-4 pl-8 pt-0 pb-3 text-slate-400 dark:text-slate-200 text-left">Load time</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% foreach($PagesScoringBoardData as $_page): %}
+                            <tr>
+                                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+                                    {{ $_page['id'] }}
+                                </td>
+                                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+                                    <a href="{{ $_page['url'] }}" target="_blank">&#9741;
+                                        {% if ($_page['metaTitle']): %}
+                                            {{ $_page['metaTitle'] }}
+                                        {% else: %}
+                                            &mdash;
+                                        {% endif; %}
+                                    </a>
+                                </td>
+                                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ $_page['wordsCount'] }}</td>
+                                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ $_page['imagesCount'] }}</td>
+                                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ $_page['internalLinksCount'] }}</td>
+                                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ $_page['externalLinksCount'] }}</td>
+                                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">{{ $_page['statusCode'] }}</td>
+                                <td class="border-b border-slate-100 dark:border-slate-700 p-4 pl-8 text-slate-500 dark:text-slate-400">
+                                    &#9201; {{ number_format($_page['loadTime'], 3, '.', ' ') }} sec.
+                                </td>
+                            </tr>
+                        {% endforeach; %}
+                    </tbody>
+                </table>
+
+            {% else: %}
+
+                <p class="content-center text-center text-gray-500 p-8">
+                    <svg class="inline-block w-6 h-6 dark:text-white text-center" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                    Enter url to crawl
+                </p>
+
+            {% endif; %}
+        </div>
+
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+{
+    "name": "be3max/http-crawler",
+    "version": "1.0.0",
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "HTTPCrawler\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "HTMLDomParserTests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": "^8.0",
+        "phpunit/phpunit": "^9.0",
+        "psr/log": "1.0.0",
+        "ext-json": "*",
+        "ext-libxml": "*",
+        "ext-dom": "*"
+    },
+    "scripts": {
+        "test": "phpunit",
+        "psalm": "vendor/bin/psalm --config=psalm.xml"
+    },
+    "require-dev": {
+        "phpspec/prophecy": "^1.17"
+    }
+}
