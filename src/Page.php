@@ -260,7 +260,7 @@ class Page
      */
     private function setLoadTime(float|bool $loadTime): void
     {
-        $this->loadTime = max((int)$loadTime, 0);
+        $this->loadTime = max($loadTime, 0);
     }
 
     /**

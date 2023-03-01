@@ -7,8 +7,8 @@ class SimpleTemplate
 {
 
     public static array $blocks = [];
-    public static string $cache_path = '..\cache';
-    public static string $templates_path = '..\templates';
+    public static string $cache_path = '..'.DIRECTORY_SEPARATOR.'cache';
+    public static string $templates_path = '..'.DIRECTORY_SEPARATOR.'templates';
 
     static function view($file, $data = []): void
     {
