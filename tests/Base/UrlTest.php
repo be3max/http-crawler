@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace HTMLDomParserTests\Base;
 
 use HTTPCrawler\Url;
+use PHPUnit\Framework\TestCase;
 
-class UrlTest extends \PHPUnit\Framework\TestCase
+class UrlTest extends TestCase
 {
     /**
      *

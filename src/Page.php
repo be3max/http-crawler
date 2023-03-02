@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace HTTPCrawler;
 
+use HTTPCrawler\DomNodes\{ADomHandler, ImgDomHandler, TitleDomHandler};
+
 /**
  *
  */
@@ -131,7 +133,7 @@ class Page
      * @param string|null $metaTitle
      * @return void
      */
-    private function setMetaTitle(?string $metaTitle): void
+    public function setMetaTitle(?string $metaTitle): void
     {
         $this->metaTitle = $metaTitle;
     }
@@ -173,7 +175,7 @@ class Page
      * @param string $link
      * @return void
      */
-    private function addLink(string $link): void
+    public function addLink(string $link): void
     {
         $link = filter_var($link, FILTER_SANITIZE_URL);
         if (!empty($link)) {
@@ -239,7 +241,7 @@ class Page
      * @param string $src
      * @return void
      */
-    private function addImage(string $src): void
+    public function addImage(string $src): void
     {
         if (!empty($src) && !in_array($src, $this->getImages())) {
             $this->uniqueImages[] = $src;
@@ -258,35 +260,35 @@ class Page
      * @param float|bool $loadTime
      * @return void
      */
-    private function setLoadTime(float|bool $loadTime): void
+    private function setLoadTime(float $loadTime): void
     {
         $this->loadTime = max($loadTime, 0);
     }
 
     /**
+     * Detect ans save page nodes by type
+     *
      * @return void
      */
     private function processPage(): void
     {
-        $this->setLoadTime($this->getDomUrl()->getLoadTime());
+        $this->setLoadTime((float)$this->getDomUrl()->getLoadTime());
 
         $this->updateWordsCount();
 
         $this->setStatusCode($this->getDomUrl()->getStatusCode());
 
+        $aDomHandler = new ADomHandler($this);
+        $imgDomHandler = new ImgDomHandler($this);
+        $titleDomHandler = new TitleDomHandler($this);
+
+        $aDomHandler->setNext($imgDomHandler)
+            ->setNext($titleDomHandler);
+
         $nodes = $this->getDomUrl()->getDom()->getElementsByTagName("*");
 
         foreach ($nodes as $node) {
-            if ($node->tagName == 'a') {
-                $this->addLink($node->getAttribute('href'));
-
-            } elseif ($node->tagName == 'img') {
-                $this->addImage($node->getAttribute('src'));
-
-            } elseif ($node->tagName == 'title' && empty($this->getMetaTitle())) {
-                $this->setMetaTitle($node->textContent);
-
-            }
+            $aDomHandler->handle($node);
         }
     }
 

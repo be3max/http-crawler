@@ -6,8 +6,9 @@ namespace HTMLDomParserTests\Base;
 
 use HTTPCrawler\DomUrl;
 use HTTPCrawler\Page;
+use PHPUnit\Framework\TestCase;
 
-class PageTest extends \PHPUnit\Framework\TestCase
+class PageTest extends TestCase
 {
     /**
      * Test page html code parsing

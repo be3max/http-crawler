@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace HTMLDomParserTests\Base;
 
 use HTTPCrawler\PagesStatistics;
+use PHPUnit\Framework\TestCase;
 
 /**
  *
  */
-class PagesStatisticsTest extends \PHPUnit\Framework\TestCase
+class PagesStatisticsTest extends TestCase
 {
 
     /**

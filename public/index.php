@@ -53,8 +53,7 @@ if (!empty($url)) {
                 'statusCode' => $page->getStatusCode(),
             ];
         }
-    } catch (\Exception $e) {
-        print_r($e);
+    } catch (Exception $e) {
         return false;
     }
 
